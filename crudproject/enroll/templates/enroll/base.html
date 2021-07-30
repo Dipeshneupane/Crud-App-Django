@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel = 'stylesheet', href = "{% static 'enroll/css/bootstrap.css' %}">
+    <title> Crud App </title>
+</head>
+<body>
+    <div class = "container mt-5">
+        <h1 class = 'text-center alert alert-danger'> Crud app using django.</h1>
+        {% block content%}
+        {% endblock content%}
+    </div>
+
+</body>
+<script src = "{% static 'enroll/js/bootstrap.js'%}"></script>
+<script src = "{% static 'enroll/js/jquery.js'%}"></script>
+<script src = "{% static 'enroll/js/popper.js'%}"></script>
+</html> 
