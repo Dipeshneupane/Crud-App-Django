@@ -1,16 +1,27 @@
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from .forms import StudentRegistration
 from .models import User
 from django.core.paginator import Paginator, EmptyPage
 
 def addShow(request):
-    if request.method=='POST':
-        fm = StudentRegistration(request.POST)
-        if fm.is_valid():
-            fm.save()
-        fm = StudentRegistration()
+ 
+    # check if the request is post
+    if request.method =='POST': 
+        form = StudentRegistration(request.POST)
+        if form.is_valid(): 
+ 
+            post = form.save(commit = False)
+ 
+            post.save() 
+             
+        else:
+            pass
+
+            #return render(request, "enroll/addandshow.html", {'form':form}) 
     else:
-        fm = StudentRegistration()
+ 
+        form = StudentRegistration(None)  
+        #return render(request, 'enroll/addandshow.html', {'form':form})
     stud = User.objects.all()
     p = Paginator(stud, 5)
     page_num = request.GET.get('page', 1)
@@ -18,11 +29,9 @@ def addShow(request):
         page = p.page(page_num)
     except EmptyPage:
         page = p.page(1)
-    return render(request, 'enroll/addandshow.html', {'form': fm, 'stu': page})
+    return render(request, 'enroll/addandshow.html', {'form': form, 'stu': page})
 
 
-
-# Create your views here.
 
 def deleteData(request, id):
     if request.method =='POST':
