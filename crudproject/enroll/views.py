@@ -2,7 +2,12 @@ from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from .forms import StudentRegistration
 from .models import User
 from django.core.paginator import Paginator, EmptyPage
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
+
+
+@login_required
 def addShow(request):
  
     # check if the request is post
@@ -29,9 +34,9 @@ def addShow(request):
         page = p.page(page_num)
     except EmptyPage:
         page = p.page(1)
-    return render(request, 'enroll/addandshow.html', {'form': form, 'stu': page})
+    return render(request, 'addandshow.html', {'form': form, 'stu': page})
 
-
+@login_required
 
 def deleteData(request, id):
     if request.method =='POST':
@@ -49,4 +54,18 @@ def updateData(request, id):
         pi = User.objects.get(pk = id)
         fm = StudentRegistration(instance = pi)
 
-    return render(request, 'enroll/updatestudent.html',{'form':fm})
+    return render(request, 'updatestudent.html',{'form':fm})
+
+
+def Register(request):
+    if request.method=='POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            print('form is valid')
+            form.save()
+            return HttpResponseRedirect('login')
+        else:
+            print('form is invalid')
+    else:
+        form = UserCreationForm()
+    return render(request,'register.html', {'form':form})
